@@ -174,6 +174,7 @@ export default {
       },
       onLocationSubmit: function(evt) {
           this.loading = true;
+          this.theatres = [];
           var ths = this;
           var theatres = this.theatres;
           var zip = evt.target[0].value;
