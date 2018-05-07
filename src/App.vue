@@ -58,6 +58,7 @@ h2 {
     width: 320px;
     height: 100%;
     z-index: 1;
+    overflow: scroll;
 }
 
 .tooltip {
@@ -170,7 +171,7 @@ h2 {
     font-family: 'IBM Plex Mono', monospace;
     display: grid;
     grid-template-rows: 20px 30px 20px 30px 20px 30px 20px 30px 40px;
-    grid-template-columns: 260px 60px;
+    grid-template-columns: 250px 60px;
 }
 #zip-label {
     grid-column: 1 / 3;
