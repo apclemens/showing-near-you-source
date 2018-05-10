@@ -1,5 +1,6 @@
 <template>
-<div>
+<div id="everything">
+    <div id="collapse" onclick="document.getElementById('everything').classList.toggle('collapsed')"><i></i></div>
     <div id="sidebar">
         <form id="location-form" v-on:submit.prevent="onLocationSubmit">
             <button id="location-input" v-on:click="enterLocation">Manually enter location</button>

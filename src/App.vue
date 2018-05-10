@@ -55,7 +55,7 @@ h2 {
 
 #sidebar {
     position: fixed;
-    width: 320px;
+    max-width: 320px;
     height: 100%;
     z-index: 1;
     overflow: scroll;
@@ -218,6 +218,64 @@ h2 {
     grid-column: 1 / 4;
     grid-row: 9 / 10;
     margin-top: 10px;
+}
+#collapse {
+    display: none;
+}
+
+@media screen and (max-width: 900px) {
+
+i {
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+}
+
+#collapse {
+    display: block;
+    transition: left 1s;
+    z-index: 2;
+    position: absolute;
+    height:200px;
+    background-color: white;
+    left: 318px;
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 15px;
+    border: 1px solid black;
+}
+#collapse i {
+    top: 50%;
+    position: relative;
+    transform: rotate(135deg) translateX(-6px);
+}
+#sidebar {
+    transition: max-width 1s;
+}
+
+#everything.collapsed #sidebar {
+    max-width: 0;
+    overflow: hidden;
+}
+#everything.collapsed #collapse {
+    left: 0;
+}
+#everything.collapsed #collapse i {
+    transform: rotate(-45deg) translateX(4px);
+}
+#everything.collapsed #movie-list {
+    width: 100%;
+    margin-left: 0;
+}
+#movie-list {
+    transition: width 1s, margin-left 1s;
+}
+.tooltiptext {
+    display: table;
+}
+
 }
 
 
