@@ -134,10 +134,12 @@ export default {
       }
   },
   created() {
-      this.getLocation();
+      this.getLocation(false);
   },
   methods: {
-      getLocation: function() {
+      getLocation: function(evt) {
+          if (evt)
+              evt.preventDefault();
           if (navigator.geolocation) {
               var ths = this;
               navigator.geolocation.getCurrentPosition(function(position){
@@ -149,6 +151,7 @@ export default {
           }
       },
       enterLocation: function(evt){
+          console.log(evt);
           if (evt)
               evt.preventDefault();
           var ths = this;
@@ -162,7 +165,8 @@ export default {
                   ths.lng = data.results[0].geometry.location.lng;
                   ths.lat = data.results[0].geometry.location.lat;
                   ths.loc_string = 'Address: ' + address;
-                  console.log(ths.lng, ths.lat);
+                  if (evt.type == 'submit')
+                      ths.onLocationSubmit(evt);
               } else {
                   alert('There was an error.');
                   console.log(xhr);
