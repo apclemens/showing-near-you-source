@@ -11,9 +11,9 @@
                 <option value="km">km</option>
             </select>
             <label id="datefrom-label" for="datefrom">start date:</label>
-            <input type="date" name="datefrom" id="datefrom" required>
+            <input type="date" name="datefrom" id="datefrom" v-model="datefrom" required>
             <label id="dateto-label" for="dateto">end date:</label>
-            <input type="date" name="dateto" id="dateto" required>
+            <input type="date" name="dateto" id="dateto" v-model="dateto" required>
             <input id="submit" type="submit" value="submit">
         </form>
         <div id="sk-circle" class="sk-circle" v-show="loading">
@@ -32,6 +32,7 @@
         </div>
         <div id="theatre-list">
             <h2>Theatres</h2>
+            <h4 v-show="theatres.length">Click to include/exclude</h4>
             <div v-show="theatres.length" class="theatre-label" id="select-all-label" v-on:click="toggleAll">Select all</div>
             <div v-for="(data) in theatres">
                 <input class="theatre-checkbox" type="checkbox" :id="data.id" :value="data.id" v-model="checkedTheatres">
@@ -116,12 +117,13 @@ export default {
           removedMovies: [],
 
           loading: false,
+
+          datefrom: new Date().toDateInputValue(),
+          dateto: new Date().toDateInputValue(),
       }
   },
   methods: {
       toggleAll: function(evt) {
-          console.log(this.checkedTheatres);
-          console.log(this.theatres);
           switch (evt.target.innerHTML) {
               case 'Select all':
                   this.checkedTheatres = [];
@@ -185,7 +187,7 @@ export default {
 
           var a = new Date(startDate);
           var b = new Date(endDate);
-          var numDays = Math.round(Math.abs((b.getTime() - a.getTime())/(24*60*60*1000)));
+          var numDays = Math.round(Math.abs((b.getTime() - a.getTime())/(24*60*60*1000))) + 1;
 
           var data = {
               startDate: startDate,
@@ -207,7 +209,6 @@ export default {
                   ths.movies.sort(function(a, b){
                       return a.title > b.title;
                   })
-                  console.log(ths.movies);
 
                   ths.movies.forEach(function(movie){
                       movie.showtimes.forEach(function(showtime){
@@ -232,6 +233,11 @@ function findWithAttr(array, attr, value) {
     }
     return -1;
 }
+Date.prototype.toDateInputValue = (function() {
+    var local = new Date(this);
+    local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+    return local.toJSON().slice(0,10);
+});
 
 var apikey = "h6p3tbv6f2u5savqzhgq5wts";
 var baseUrl = "https://data.tmsapi.com/v1.1";
