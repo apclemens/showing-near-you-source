@@ -170,50 +170,45 @@ h2 {
 #location-form {
     font-family: 'IBM Plex Mono', monospace;
     display: grid;
-    grid-template-rows: 20px 30px 20px 30px 20px 30px 20px 30px 40px;
+    grid-template-rows: 40px 20px 30px 20px 30px 20px 30px 40px;
     grid-template-columns: 250px 60px;
 }
-#zip-label {
+#location-input {
     grid-column: 1 / 3;
     grid-row: 1 / 2;
 }
-
-#zip {
-    grid-column: 1 / 3;
-    grid-row: 2 / 3;
-}
 #distance-label {
     grid-column: 1 / 3;
-    grid-row: 3 / 4;
+    grid-row: 2 / 3;
 }
 #distance {
     width: 240px;
     grid-column: 1 / 2;
-    grid-row: 4 / 5;
+    grid-row: 3 / 4;
 }
 #unit-select {
     grid-column: 2 / 3;
-    grid-row: 4 / 5;
+    grid-row: 3 / 4;
 }
 #datefrom-label {
     grid-column: 1 / 3;
-    grid-row: 5 / 6;
+    grid-row: 4 / 5;
 }
 #datefrom {
     grid-column: 1 / 3;
-    grid-row: 6 / 7;
+    grid-row: 5 / 6;
 }
 #dateto-label {
     grid-column: 1 / 3;
-    grid-row: 7 / 8;
+    grid-row: 6 / 7;
 }
 #dateto {
     grid-column: 1 / 3;
-    grid-row: 8 / 9;
+    grid-row: 7 / 8;
 }
 #submit {
     grid-column: 1 / 3;
-    grid-row: 9 / 10;
+    grid-row: 8 / 9;
     margin-top: 10px;
 }
 

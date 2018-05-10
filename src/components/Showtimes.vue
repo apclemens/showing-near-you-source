@@ -2,8 +2,7 @@
 <div>
     <div id="sidebar">
         <form id="location-form" v-on:submit.prevent="onLocationSubmit">
-            <label id="zip-label" for="zip">zip code:</label>
-            <input type="text" pattern="[0-9]{5}" name="zip" id="zip" required>
+            <button id="location-input" v-on:click="enterLocation">Manually enter location</button>
             <label id="distance-label" for="distance">radius:</label>
             <input type="number" name="distance" id="distance" value="15" required>
             <select name="unit" id="unit-select">
@@ -120,9 +119,44 @@ export default {
 
           datefrom: new Date().toDateInputValue(),
           dateto: new Date().toDateInputValue(),
+
+          lng: 0,
+          lat: 0,
+      }
+  },
+  created() {
+      if (navigator.geolocation) {
+          var ths = this;
+          navigator.geolocation.getCurrentPosition(function(position){
+              ths.lng = position.coords.longitude;
+              ths.lat = position.coords.latitude;
+          });
+      } else {
+          alert('Showing Near You needs geolocation to be supported to run.');
       }
   },
   methods: {
+      enterLocation: function(evt){
+          if (evt)
+              evt.preventDefault();
+          var ths = this;
+          var address = prompt("Please enter your address");
+          var url = 'https://maps.googleapis.com/maps/api/geocode/json?address='+address.replace(' ','+')+'&key=AIzaSyDOQ5kRHiFFudzZzd19LUJ3iNSrsdOZI6Q';
+          var xhr = new XMLHttpRequest();
+          xhr.open('GET', url);
+          xhr.onload = function() {
+              if (xhr.status === 200) {
+                  var data = JSON.parse(xhr.responseText);
+                  ths.lng = data.results[0].geometry.location.lng;
+                  ths.lat = data.results[0].geometry.location.lat;
+                  ths.onLocationSubmit(evt);
+              } else {
+                  alert('There was an error.');
+                  console.log(xhr);
+              }
+          }
+          xhr.send();
+      },
       toggleAll: function(evt) {
           switch (evt.target.innerHTML) {
               case 'Select all':
@@ -179,11 +213,15 @@ export default {
           this.theatres = [];
           var ths = this;
           var theatres = this.theatres;
-          var zip = evt.target[0].value;
           var distance = evt.target[1].value;
           var unit = evt.target[2].value;
           var startDate = evt.target[3].value;
           var endDate = evt.target[4].value;
+
+          if (this.lat == 0 && this.lng == 0) {
+              this.enterLocation(evt);
+              return;
+          }
 
           var a = new Date(startDate);
           var b = new Date(endDate);
@@ -192,7 +230,8 @@ export default {
           var data = {
               startDate: startDate,
               numDays: numDays,
-              zip: zip,
+              lat: this.lat,
+              lng: this.lng,
               radius: distance,
               units: unit,
               api_key: apikey,
