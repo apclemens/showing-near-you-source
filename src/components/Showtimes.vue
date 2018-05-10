@@ -3,9 +3,12 @@
     <div id="sidebar">
         <form id="location-form" v-on:submit.prevent="onLocationSubmit">
             <button id="location-input" v-on:click="enterLocation">Manually enter location</button>
+            <button id="location-get" v-on:click="getLocation">Use current location</button>
+            <div align="center" id="location-div" v-if="lat&&lng">{{ loc_string }}</div>
+            <div align="center" id="location-div" v-if="!(lat&&lng)" style="color: red;">Location not set</div>
             <label id="distance-label" for="distance">radius:</label>
-            <input type="number" name="distance" id="distance" value="15" required>
-            <select name="unit" id="unit-select">
+            <input type="number" name="distance" id="distance" v-model="distance" required>
+            <select name="unit" id="unit-select" v-model="unit">
                 <option value="mi">mi</option>
                 <option value="km">km</option>
             </select>
@@ -32,6 +35,7 @@
         <div id="theatre-list">
             <h2>Theatres</h2>
             <h4 v-show="theatres.length">Click to include/exclude</h4>
+            <h4 v-show="!theatres.length && loaded">No theatres found</h4>
             <div v-show="theatres.length" class="theatre-label" id="select-all-label" v-on:click="toggleAll">Select all</div>
             <div v-for="(data) in theatres">
                 <input class="theatre-checkbox" type="checkbox" :id="data.id" :value="data.id" v-model="checkedTheatres">
@@ -73,7 +77,7 @@
                         <img class="external-link" src="./imdb.png">
                     </a>
                     <a target="_blank" :href="'http://www.google.com/search?q=site:youtube.com+trailer+' + data.title.replace(' ', '+') + '+'+data.releaseYear + '+film&btnI'">
-                        <img class="external-link" src="./youtube.jpg">
+                        <img class="external-link" src="./youtube.png">
                     </a>
                 </div>
                           <h3>{{ data.title }}</h3>
@@ -116,26 +120,34 @@ export default {
           removedMovies: [],
 
           loading: false,
+          loaded: false,
 
           datefrom: new Date().toDateInputValue(),
           dateto: new Date().toDateInputValue(),
+          unit: 'mi',
+          distance: 15,
 
           lng: 0,
           lat: 0,
+
+          loc_string: '',
       }
   },
   created() {
-      if (navigator.geolocation) {
-          var ths = this;
-          navigator.geolocation.getCurrentPosition(function(position){
-              ths.lng = position.coords.longitude;
-              ths.lat = position.coords.latitude;
-          });
-      } else {
-          alert('Showing Near You needs geolocation to be supported to run.');
-      }
+      this.getLocation();
   },
   methods: {
+      getLocation: function() {
+          if (navigator.geolocation) {
+              var ths = this;
+              navigator.geolocation.getCurrentPosition(function(position){
+                  ths.lng = position.coords.longitude;
+                  ths.lat = position.coords.latitude;
+
+                  ths.loc_string = 'Using current location';
+              });
+          }
+      },
       enterLocation: function(evt){
           if (evt)
               evt.preventDefault();
@@ -149,7 +161,8 @@ export default {
                   var data = JSON.parse(xhr.responseText);
                   ths.lng = data.results[0].geometry.location.lng;
                   ths.lat = data.results[0].geometry.location.lat;
-                  ths.onLocationSubmit(evt);
+                  ths.loc_string = 'Address: ' + address;
+                  console.log(ths.lng, ths.lat);
               } else {
                   alert('There was an error.');
                   console.log(xhr);
@@ -209,19 +222,19 @@ export default {
           return displayedShowtimes;
       },
       onLocationSubmit: function(evt) {
-          this.loading = true;
-          this.theatres = [];
-          var ths = this;
-          var theatres = this.theatres;
-          var distance = evt.target[1].value;
-          var unit = evt.target[2].value;
-          var startDate = evt.target[3].value;
-          var endDate = evt.target[4].value;
-
           if (this.lat == 0 && this.lng == 0) {
               this.enterLocation(evt);
               return;
           }
+
+          this.loading = true;
+          this.theatres = [];
+          var ths = this;
+          var theatres = this.theatres;
+          var distance = this.distance;
+          var unit = this.unit;
+          var startDate = this.datefrom;
+          var endDate = this.dateto;
 
           var a = new Date(startDate);
           var b = new Date(endDate);
@@ -244,6 +257,9 @@ export default {
           xhr.open('GET', url);
           xhr.onload = function() {
               if (xhr.status === 200) {
+                  if (!xhr.responseText) {
+                      ths.movies = [];
+                  } else {
                   ths.movies = JSON.parse(xhr.responseText);
                   ths.movies.sort(function(a, b){
                       return a.title > b.title;
@@ -254,8 +270,10 @@ export default {
                           if (findWithAttr(theatres, 'id', showtime.theatre.id) == -1) theatres.push(showtime.theatre);
                       })
                   })
+              }
               } else console.log(xhr);
               ths.loading = false;
+              ths.loaded = true;
           }
           xhr.send();
       },
