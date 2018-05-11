@@ -148,6 +148,7 @@ export default {
                   ths.lat = position.coords.latitude;
 
                   ths.loc_string = 'Using current location';
+                  ths.onLocationSubmit(evt);
               });
           }
       },
@@ -166,8 +167,7 @@ export default {
                   ths.lng = data.results[0].geometry.location.lng;
                   ths.lat = data.results[0].geometry.location.lat;
                   ths.loc_string = 'Address: ' + address;
-                  if (evt.type == 'submit')
-                      ths.onLocationSubmit(evt);
+                  ths.onLocationSubmit(evt);
               } else {
                   alert('There was an error.');
                   console.log(xhr);
@@ -275,6 +275,11 @@ export default {
                           if (findWithAttr(theatres, 'id', showtime.theatre.id) == -1) theatres.push(showtime.theatre);
                       })
                   })
+                  ths.checkedTheatres = [];
+                  for (var i=0; i<ths.theatres.length; i++) {
+                      ths.checkedTheatres.push(ths.theatres[i].id);
+                  }
+                  document.getElementById('select-all-label').innerHTML = 'Select none';
               }
               } else console.log(xhr);
               ths.loading = false;
