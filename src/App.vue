@@ -241,7 +241,7 @@ i {
     background-color: white;
     left: 318px;
     position: fixed;
-    top: 50%;
+    top: 50vh;
     transform: translateY(-50%);
     width: 15px;
     border: 1px solid black;
@@ -250,6 +250,7 @@ i {
     top: 50%;
     position: relative;
     transform: rotate(135deg) translateX(-6px);
+    transition: all 1s;
 }
 #sidebar {
     transition: max-width 1s;
