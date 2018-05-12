@@ -2,23 +2,23 @@
 <div id="everything">
     <div id="collapse" onclick="document.getElementById('everything').classList.toggle('collapsed')"><i></i></div>
     <div id="sidebar">
-        <form id="location-form" v-on:submit.prevent="onLocationSubmit">
+        <div id="location-form">
             <button id="location-input" v-on:click="enterLocation">Manually enter location</button>
             <button id="location-get" v-on:click="getLocation">Use current location</button>
             <div align="center" id="location-div" v-if="lat&&lng">{{ loc_string }}</div>
             <div align="center" id="location-div" v-if="!(lat&&lng)" style="color: red;">Location not set</div>
             <label id="distance-label" for="distance">radius:</label>
-            <input type="number" name="distance" id="distance" v-model="distance" required>
+            <input v-on:keyup.enter="onLocationSubmit" type="number" name="distance" id="distance" v-model="distance" required>
             <select name="unit" id="unit-select" v-model="unit">
                 <option value="mi">mi</option>
                 <option value="km">km</option>
             </select>
             <label id="datefrom-label" for="datefrom">start date:</label>
-            <input type="date" name="datefrom" id="datefrom" v-model="datefrom" required>
+            <input v-on:keyup.enter="onLocationSubmit" type="date" name="datefrom" id="datefrom" v-model="datefrom" required>
             <label id="dateto-label" for="dateto">end date:</label>
-            <input type="date" name="dateto" id="dateto" v-model="dateto" required>
-            <input id="submit" type="submit" value="submit">
-        </form>
+            <input v-on:keyup.enter="onLocationSubmit" type="date" name="dateto" id="dateto" v-model="dateto" required>
+            <button id="submit" v-on:click="onLocationSubmit">submit</button>
+        </div>
         <LoadingCircle v-show="loading"/>
         <div id="theatre-list">
             <h2>Theatres</h2>
@@ -127,12 +127,10 @@ export default {
       }
   },
   created() {
-      this.getLocation(false);
+      this.getLocation();
   },
   methods: {
-      getLocation: function(evt) {
-          if (evt)
-              evt.preventDefault();
+      getLocation: function() {
           if (navigator.geolocation) {
               var ths = this;
               navigator.geolocation.getCurrentPosition(function(position){
@@ -140,14 +138,11 @@ export default {
                   ths.lat = position.coords.latitude;
 
                   ths.loc_string = 'Using current location';
-                  ths.onLocationSubmit(evt);
+                  ths.onLocationSubmit();
               });
           }
       },
-      enterLocation: function(evt){
-          console.log(evt);
-          if (evt)
-              evt.preventDefault();
+      enterLocation: function(){
           var ths = this;
           var address = prompt("Please enter your address");
           var url = 'https://maps.googleapis.com/maps/api/geocode/json?address='+address.replace(' ','+')+'&key=AIzaSyDOQ5kRHiFFudzZzd19LUJ3iNSrsdOZI6Q';
@@ -159,7 +154,7 @@ export default {
                   ths.lng = data.results[0].geometry.location.lng;
                   ths.lat = data.results[0].geometry.location.lat;
                   ths.loc_string = 'Address: ' + address;
-                  ths.onLocationSubmit(evt);
+                  ths.onLocationSubmit();
               } else {
                   alert('There was an error.');
                   console.log(xhr);
@@ -218,9 +213,9 @@ export default {
           })
           return displayedShowtimes;
       },
-      onLocationSubmit: function(evt) {
+      onLocationSubmit: function() {
           if (this.lat == 0 && this.lng == 0) {
-              this.enterLocation(evt);
+              this.enterLocation();
               return;
           }
 
