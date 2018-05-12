@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Showtimes msg="Welcome to Your Vue.js App"/>
+    <Showtimes/>
   </div>
 </template>
 
@@ -13,6 +13,14 @@ export default {
     Showtimes
   }
 }
+
+// helper functions
+
+Date.prototype.toDateInputValue = (function() {
+    var local = new Date(this);
+    local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+    return local.toJSON().slice(0,10);
+});
 </script>
 
 <style>
@@ -20,10 +28,6 @@ export default {
 
 body, html {
     font-family: 'Muli', sans-serif;
-}
-
-input, textarea, select {
-    font-family: inherit;
 }
 
 .theatre-checkbox {
@@ -61,223 +65,9 @@ h2 {
     overflow: scroll;
 }
 
-.tooltip {
-    border-bottom: 1px dotted black;
-}
-
-.tooltip .tooltiptext {
-    visibility: hidden;
-    background-color: black;
-    color: #fff;
-    padding: 5px 0;
-    border-radius: 6px;
-    position: absolute;
-    z-index: 1;
-}
-.tooltiptext {
-    max-width: 720px;
-    display: inline;
-}
-.tooltiptext ul {
-    list-style-type: none;
-    padding: 5px 15px;
-}
-.tooltiptext img.poster {
-    float: left;
-}
-.tooltiptext div {
-    padding: 5px 0;
-}
-.tooltiptext.summary {
-    width: 720px;
-    padding: 10px;
-}
-.tooltiptext.summary img {
-    padding-right: 10px;
-}
-
-.tooltip:hover .tooltiptext {
-    visibility: visible;
-}
-
 #select-all-label {
     display:inline-block;
     padding-bottom: 10px;
     color: blue;
 }
-
-#movie-list {
-    margin-left: 325px;
-    width: calc(100% - 320px);
-}
-#movie-list thead tr:nth-child(1) th{
-    position: -webkit-sticky;
-    position: -moz-sticky;
-    position: -ms-sticky;
-    position: -o-sticky;
-    position: sticky;
-    top: 10px;
-}
-#movie-list ul {
-    list-style-type: none;
-}
-#movie-list td, #movie-list th {
-    border: 1px solid #ddd;
-    padding: 8px;
-}
-#movie-list tbody tr:not(.visible) {
-    display: none;
-}
-#movie-list tbody .visible:nth-of-type(even) {
-    background-color: #f2f2f2;
-}
-#movie-list tbody .visible:nth-of-type(odd) {
-    background-color: #ddd;
-}
-.visible:hover {
-    background-color: white !important;
-}
-#movie-list th {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    background-color: black;
-    color: white;
-}
-
-.external-link {
-    width: 20px;
-}
-.external-link-wrapper {
-    float: right;
-    margin: 15px;
-    background-color: white;
-    margin-left: 5px;
-}
-
-.sortable {
-    cursor: pointer;
-}
-.sorted-down:after {
-    content: '▲';
-    float: right;
-}
-.sorted-up:after {
-    content: '▼';
-    float: right;
-}
-
-#location-form {
-    font-family: 'IBM Plex Mono', monospace;
-    display: grid;
-    grid-template-rows: auto auto 20px 30px 20px 30px 20px 30px 40px;
-    grid-template-columns: 155px 95px 60px;
-}
-#location-input {
-    grid-column: 1 / 2;
-    grid-row: 1 / 2;
-}
-#location-get {
-    grid-column: 2 / 4;
-    grid-row: 1 / 2;
-}
-#location-div {
-    grid-column: 1 / 4;
-    grid-row: 2 / 3;
-}
-#distance-label {
-    grid-column: 1 / 4;
-    grid-row: 3 / 4;
-}
-#distance {
-    width: 230px;
-    grid-column: 1 / 3;
-    grid-row: 4 / 5;
-}
-#unit-select {
-    grid-column: 3 / 4;
-    grid-row: 4 / 5;
-}
-#datefrom-label {
-    grid-column: 1 / 4;
-    grid-row: 5 / 6;
-}
-#datefrom {
-    grid-column: 1 / 4;
-    grid-row: 6 / 7;
-}
-#dateto-label {
-    grid-column: 1 / 4;
-    grid-row: 7 / 8;
-}
-#dateto {
-    grid-column: 1 / 4;
-    grid-row: 8 / 9;
-}
-#submit {
-    grid-column: 1 / 4;
-    grid-row: 9 / 10;
-    margin-top: 10px;
-}
-#collapse {
-    display: none;
-}
-
-@media screen and (max-width: 900px) {
-
-i {
-    border: solid black;
-    border-width: 0 3px 3px 0;
-    display: inline-block;
-    padding: 3px;
-}
-
-#collapse {
-    display: block;
-    transition: left 1s;
-    z-index: 2;
-    position: absolute;
-    height:200px;
-    background-color: white;
-    left: 318px;
-    position: fixed;
-    top: 50vh;
-    transform: translateY(-50%);
-    width: 15px;
-    border: 1px solid black;
-}
-#collapse i {
-    top: 50%;
-    position: relative;
-    transform: rotate(135deg) translateX(-6px);
-    transition: all 1s;
-}
-#sidebar {
-    transition: max-width 1s;
-}
-
-#everything.collapsed #sidebar {
-    max-width: 0;
-    overflow: hidden;
-}
-#everything.collapsed #collapse {
-    left: 0;
-}
-#everything.collapsed #collapse i {
-    transform: rotate(-45deg) translateX(4px);
-}
-#everything.collapsed #movie-list {
-    width: 100%;
-    margin-left: 0;
-}
-#movie-list {
-    transition: width 1s, margin-left 1s;
-}
-.tooltiptext {
-    display: table;
-}
-
-}
-
-
 </style>
