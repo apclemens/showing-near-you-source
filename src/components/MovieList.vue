@@ -16,16 +16,16 @@
                       <div class="tooltiptext summary">
                 <div class="external-link-wrapper">
                     <a target="_blank" :href="'http://www.google.com/search?q=site:en.wikipedia.org+' + data.title.replace(' ', '+') + '+'+data.releaseYear + '+film&btnI'">
-                        <img class="external-link" src="./wiki.png">
+                        <img class="external-link" src="./images/wiki.png">
                     </a>
                     <a target="_blank" :href="'http://www.google.com/search?q=site:rottentomatoes.com+' + data.title.replace(' ', '+') + '+'+data.releaseYear + '+film&btnI'">
-                        <img class="external-link" src="./rt.png">
+                        <img class="external-link" src="./images/rt.png">
                     </a>
                     <a target="_blank" :href="'http://www.google.com/search?q=site:imdb.com+' + data.title.replace(' ', '+') + '+'+data.releaseYear + '+film&btnI'">
-                        <img class="external-link" src="./imdb.png">
+                        <img class="external-link" src="./images/imdb.png">
                     </a>
                     <a target="_blank" :href="'http://www.google.com/search?q=site:youtube.com+trailer+' + data.title.replace(' ', '+') + '+'+data.releaseYear + '+film&btnI'">
-                        <img class="external-link" src="./youtube.png">
+                        <img class="external-link" src="./images/youtube.png">
                     </a>
                 </div>
                           <h3>{{ data.title }}</h3>
@@ -150,7 +150,7 @@ var findWithAttr = function(array, attr, value) {
 }
 
 .remove-button {
-    background-image: url('./remove.png');
+    background-image: url('./images/remove.png');
     height: 16px;
     width: 16px;
     background-size: cover;
