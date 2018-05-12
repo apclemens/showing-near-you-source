@@ -30,18 +30,6 @@ body, html {
     font-family: 'Muli', sans-serif;
 }
 
-.theatre-checkbox {
-    display: none;
-}
-
-.theatre-label {
-    cursor: pointer;
-    color: red;
-}
-.theatre-checkbox:checked + label {
-    color: green;
-}
-
 h2, h4 {
     font-family: 'Acme', sans-serif;
 }
@@ -63,11 +51,5 @@ h2 {
     height: 100%;
     z-index: 1;
     overflow: scroll;
-}
-
-#select-all-label {
-    display:inline-block;
-    padding-bottom: 10px;
-    color: blue;
 }
 </style>

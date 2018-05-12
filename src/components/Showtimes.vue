@@ -5,16 +5,11 @@
             v-on:locationSubmit="requestMovieList($event)"
         />
         <LoadingCircle v-show="loading"/>
-        <div id="theatre-list">
-            <h2>Theatres</h2>
-            <h4 v-show="theatres.length">Click to include/exclude</h4>
-            <h4 v-show="!theatres.length && loaded">No theatres found</h4>
-            <div v-show="theatres.length" class="theatre-label" id="select-all-label" v-on:click="toggleAll">Select all</div>
-            <div v-for="(data, index) in theatres" :key="index">
-                <input class="theatre-checkbox" type="checkbox" :id="data.id" :value="data.id" v-model="checkedTheatres">
-                <label class="theatre-label" :for="data.id">{{data.name}}</label>
-            </div>
-        </div>
+        <TheatreList
+            v-bind:theatres="theatres"
+            v-bind:loaded="loaded"
+            v-model="checkedTheatres"
+        />
         <div id="removed-movies">
             <h2>Hidden movies</h2>
             <ul>
@@ -36,6 +31,7 @@
 import LoadingCircle from './LoadingCircle.vue'
 import MovieList from './MovieList.vue'
 import Settings from './Settings.vue'
+import TheatreList from './TheatreList.vue'
 
 export default {
   name: 'Showtimes',
@@ -43,6 +39,7 @@ export default {
     LoadingCircle,
     MovieList,
     Settings,
+    TheatreList,
   },
   data() {
       return {
@@ -116,11 +113,6 @@ export default {
                           if (findWithAttr(theatres, 'id', showtime.theatre.id) == -1) theatres.push(showtime.theatre);
                       })
                   })
-                  ths.checkedTheatres = [];
-                  for (var i=0; i<ths.theatres.length; i++) {
-                      ths.checkedTheatres.push(ths.theatres[i].id);
-                  }
-                  document.getElementById('select-all-label').innerHTML = 'Select none';
               }
               } else console.log(xhr);
               ths.loading = false;
