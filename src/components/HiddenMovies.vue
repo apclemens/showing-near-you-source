@@ -39,6 +39,7 @@ var findWithAttr = function(array, attr, value) {
 <style scoped>
 .hidden-movie {
     cursor: pointer;
+    text-indent: -30px;
 }
 #removed-movies ul {
     list-style-type: none;
