@@ -15,7 +15,7 @@
                       {{data.title}}
                       <div class="tooltiptext summary">
                 <div class="external-link-wrapper">
-                    <a target="_blank" :href="'http://www.google.com/search?q=site:en.wikipedia.org+' + data.title.replace(' ', '+') + '+'+data.releaseYear + '+film&btnI'">
+                    <a style="filter: invert(100%);" target="_blank" :href="'http://www.google.com/search?q=site:en.wikipedia.org+' + data.title.replace(' ', '+') + '+'+data.releaseYear + '+film&btnI'">
                         <img class="external-link" src="./images/wiki.png">
                     </a>
                     <a target="_blank" :href="'http://www.google.com/search?q=site:rottentomatoes.com+' + data.title.replace(' ', '+') + '+'+data.releaseYear + '+film&btnI'">
@@ -188,8 +188,8 @@ var findWithAttr = function(array, attr, value) {
     width: 720px;
     padding: 10px;
 }
-.tooltiptext.summary img {
-    padding-right: 10px;
+.tooltiptext.summary .poster {
+    margin-right: 10px;
 }
 .tooltip:hover .tooltiptext {
     visibility: visible;
@@ -201,7 +201,6 @@ var findWithAttr = function(array, attr, value) {
 .external-link-wrapper {
     float: right;
     margin: 15px;
-    background-color: white;
     margin-left: 5px;
 }
 </style>
