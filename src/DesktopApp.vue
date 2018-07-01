@@ -106,7 +106,7 @@ export default {
                   } else {
                   ths.movies = JSON.parse(xhr.responseText);
                   ths.movies.sort(function(a, b){
-                      return a.title > b.title;
+                      return a.title > b.title ? 1 : a.title < b.title ? -1 : 0;
                   })
 
                   ths.movies.forEach(function(movie){
