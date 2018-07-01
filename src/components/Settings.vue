@@ -1,5 +1,6 @@
 <template>
-        <div id="location-form">
+    <div>
+        <div id="location-form" :class="$mq">
             <button id="location-input" v-on:click="enterLocation">Manually enter location</button>
             <button id="location-get" v-on:click="getLocation">Use current location</button>
             <div align="center" id="location-div" v-if="lat&&lng">{{ loc_string }}</div>
@@ -16,6 +17,8 @@
             <input v-on:keyup.enter="onLocationSubmit" type="date" name="dateto" id="dateto" v-model="dateto" required>
             <button id="submit" v-on:click="onLocationSubmit">submit</button>
         </div>
+        <button id="collapse" v-if="$mq === 'sm'" v-on:click="collapse">collapse</button>
+    </div>
 </template>
 
 <script>
@@ -77,13 +80,43 @@ export default {
           }
 
           this.$emit('locationSubmit', {'datefrom': this.datefrom, 'dateto': this.dateto, 'unit': this.unit, 'distance': this.distance, 'lng': this.lng, 'lat': this.lat})
-      }
+          this.collapse();
+      },
+      collapse: function() {
+          if (this.$mq !== 'sm') return;
+          var settings = document.getElementById('location-form');
+          var collapse_button = document.getElementById('collapse');
+          if (settings.style.maxHeight) { // collapse
+              settings.style.maxHeight = null;
+              if (this.loc_string) {
+                  collapse_button.innerHTML = 'Movies playing within ';
+                  collapse_button.innerHTML += this.distance + ' ';
+                  collapse_button.innerHTML += this.unit + ' of ';
+                  if (this.loc_string.substr(0, 9) == 'Address: ') {
+                      collapse_button.innerHTML += this.loc_string.substr(9);
+                  } else {
+                      collapse_button.innerHTML += 'current location';
+                  }
+                  if (this.datefrom == this.dateto) {
+                      collapse_button.innerHTML += ' on ' + this.datefrom;
+                  } else {
+                      collapse_button.innerHTML += ' between ' + this.datefrom + ' and ' + this.dateto;
+                  }
+                  collapse_button.innerHTML += ' (tap to change)'
+              } else {
+                  collapse_button.innerHTML = 'Click here to set location';
+              }
+          } else {
+              settings.style.maxHeight = settings.scrollHeight + 'px'; // expand
+              collapse_button.innerHTML = 'collapse';
+          }
+      },
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="scss" scoped>
 
 input, textarea, select, button {
     font-family: inherit;
@@ -93,7 +126,13 @@ input, textarea, select, button {
     font-family: 'IBM Plex Mono', monospace;
     display: grid;
     grid-template-rows: auto auto 20px 30px 20px 30px 20px 30px 40px;
-    grid-template-columns: 155px 95px 60px;
+    grid-template-columns: 50% auto 60px;
+}
+#location-form.sm {
+    width: 100%;
+    max-height: 0px;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
 }
 #location-input {
     grid-column: 1 / 2;
@@ -112,7 +151,7 @@ input, textarea, select, button {
     grid-row: 3 / 4;
 }
 #distance {
-    width: 230px;
+    width: calc(100% - 20px);
     grid-column: 1 / 3;
     grid-row: 4 / 5;
 }
@@ -140,5 +179,8 @@ input, textarea, select, button {
     grid-column: 1 / 4;
     grid-row: 9 / 10;
     margin-top: 10px;
+}
+#collapse {
+    width: 100%;
 }
 </style>
