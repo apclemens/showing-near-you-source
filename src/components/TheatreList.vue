@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="all-settings" :class="$mq">
         <div id="theatre-list" :class="$mq">
             <h2>Theatres</h2>
             <h4 v-show="theatres.length">Click to include/exclude</h4>
@@ -57,11 +57,13 @@ export default {
       collapse: function() {
           if (this.$mq !== 'sm') return;
           var list = document.getElementById('theatre-list');
+          var button = document.getElementById('theatre-collapse');
           if (list.style.maxHeight === '0px') { //collapse
               list.style.maxHeight = list.scrollHeight + 'px';
           } else { //expand
               list.style.maxHeight = '0px';
           }
+          button.classList.toggle('expanded');
       }
   }
 }
@@ -69,6 +71,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+#theatre-list.lg {
+    max-height: none !important;
+}
 #theatre-list.sm {
     overflow: hidden;
     max-height: 1000px;
@@ -108,5 +113,25 @@ export default {
 }
 #theatre-collapse {
     width: 100%;
+}
+#theatre-collapse:before {
+    content: url('https://i.stack.imgur.com/1WdEk.png');
+    left: 33%;
+    position: absolute;
+}
+#theatre-collapse:after {
+    content: url('https://i.stack.imgur.com/1WdEk.png');
+    right: 33%;
+    position: absolute;
+}
+#theatre-collapse.expanded:before {
+    content: url('https://i.stack.imgur.com/r6OD6.png');
+    left: 33%;
+    position: absolute;
+}
+#theatre-collapse.expanded:after {
+    content: url('https://i.stack.imgur.com/r6OD6.png');
+    right: 33%;
+    position: absolute;
 }
 </style>

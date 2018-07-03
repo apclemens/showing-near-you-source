@@ -1,17 +1,17 @@
 import Vue from 'vue'
 import VueMq from 'vue-mq'
-import DesktopApp from './DesktopApp.vue'
+import App from './App.vue'
 
 Vue.config.productionTip = false
 Vue.use(VueMq, {
     breakpoints: {
-        sm: 450,
+        sm: 700,
         lg: Infinity,
     }
 })
 
 new Vue({
-    render: h => h(DesktopApp)
+    render: h => h(App)
 })
 .$mount('#app')
 

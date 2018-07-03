@@ -1,31 +1,44 @@
 <template>
 <div>
-    <div id="sidebar">
+<div>
+    <div id="sidebar" :class="$mq">
         <Settings
             v-on:locationSubmit="requestMovieList($event)"
         />
-        <LoadingCircle v-show="loading"/>
+        <LoadingCircle 
+            v-show="loading"/>
         <TheatreList
             v-bind:theatres="theatres"
             v-bind:loaded="loaded"
             v-model="checkedTheatres"
         />
         <HiddenMovies
+            v-if="$mq === 'lg'"
             v-bind:removedMovies="removedMovies"
             v-on:reAddMovie="removedMovies.splice($event, 1);"
         />
     </div>
-    <MovieList
+    <MovieListDesktop
+        v-if="$mq === 'lg'"
+        v-bind:movies="movies"
+        v-bind:checkedTheatres="checkedTheatres"
+        v-bind:removedMovies="removedMovies"
+    />
+    <MovieListMobile
+        v-if="$mq === 'sm'"
         v-bind:movies="movies"
         v-bind:checkedTheatres="checkedTheatres"
         v-bind:removedMovies="removedMovies"
     />
 </div>
+
+</div>
 </template>
 
 <script>
 import LoadingCircle from './components/LoadingCircle.vue'
-import MovieList from './components/MovieList.vue'
+import MovieListDesktop from './components/MovieListDesktop.vue'
+import MovieListMobile from './components/MovieListMobile.vue'
 import Settings from './components/Settings.vue'
 import TheatreList from './components/TheatreList.vue'
 import HiddenMovies from './components/HiddenMovies.vue'
@@ -34,7 +47,8 @@ export default {
   name: 'Showtimes',
   components: {
     LoadingCircle,
-    MovieList,
+    MovieListDesktop,
+    MovieListMobile,
     Settings,
     TheatreList,
     HiddenMovies,
@@ -84,7 +98,7 @@ export default {
                   } else {
                   ths.movies = JSON.parse(xhr.responseText);
                   ths.movies.sort(function(a, b){
-                      return a.title > b.title;
+                      return a.title > b.title ? 1 : a.title < b.title ? -1 : 0;
                   })
 
                   ths.movies.forEach(function(movie){
@@ -127,6 +141,7 @@ var theatersUrl = baseUrl + '/movies/showings';
 
 body, html {
     font-family: 'Muli', sans-serif;
+    margin: 0;
 }
 
 h2, h4 {
@@ -137,11 +152,16 @@ h2 {
     padding: 5px 0;
 }
 
-#sidebar {
+#sidebar.lg {
     position: fixed;
     max-width: 320px;
     height: 100%;
     z-index: 1;
     overflow: scroll;
+}
+#all-settings.sm {
+    margin: 4px;
+    border: 2px solid black;
+    padding: 2px;
 }
 </style>

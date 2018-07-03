@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="all-settings" :class="$mq">
         <div id="location-form" :class="$mq">
             <button id="location-input" v-on:click="enterLocation">Manually enter location</button>
             <button id="location-get" v-on:click="getLocation">Use current location</button>
@@ -133,6 +133,9 @@ input, textarea, select, button {
     max-height: 0px;
     overflow: hidden;
     transition: max-height 0.2s ease-out;
+}
+#location-form.lg {
+    max-height: none !important;
 }
 #location-input {
     grid-column: 1 / 2;
