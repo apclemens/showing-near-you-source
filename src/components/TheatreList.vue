@@ -82,6 +82,7 @@ export default {
 #theatre-list.sm #actual-list {
     max-height:50vh;
     overflow-y: scroll;
+    overflow-x: hidden;
 }
 .theatre.sm {
     border: 1px black dotted;

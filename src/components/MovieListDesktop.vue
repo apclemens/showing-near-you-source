@@ -111,7 +111,7 @@ var findWithAttr = function(array, attr, value) {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #movie-list {
-    margin-left: 325px;
+    margin-left: 320px;
     width: calc(100% - 320px);
 }
 #movie-list thead tr:nth-child(1) th{
