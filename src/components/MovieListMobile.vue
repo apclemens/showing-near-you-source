@@ -40,30 +40,7 @@
                 </li>
                           </ul>
                 </div>
-                      <!--
-                      <div class="tooltiptext summary">
-                          <h3>{{ data.title }}</h3>
-                          <img class="poster" :src="'https://dlby.tmsimg.com/' + data.preferredImage.uri">
-                      </div>
-                      -->
-
-
-
-
-
-
-
-		<!--	<td>
-                <div class="tooltip" v-for="(showtimes, theatre, index) in formatShowtimes(data.showtimes)" :key="index">
-                    {{theatre}}
-                    <span class="tooltiptext">
-                        <ul>
-                            <li v-for="(showtime, index) in showtimes" :key="index">{{formatShowtime(showtime)}}</li>
-                        </ul>
-                    </span>
-                </div>
-        </td>-->
-		</div>
+        </div>
     </div>
 
 </template>

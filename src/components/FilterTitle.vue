@@ -25,12 +25,15 @@ export default {
 
 <style scoped>
 #filter-wrapper.sm {
-    height: 29px;
+    height: 52px;
 }
 #filter-wrapper input {
     width: calc(100% - 16px);
 }
 #filter-wrapper.sm input {
+    width: calc(100% - 12px);
+    height:40px;
+    margin-bottom: 6px;
     position: fixed;
     top: 0;
 }
