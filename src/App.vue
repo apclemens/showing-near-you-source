@@ -1,7 +1,10 @@
 <template>
 <div>
-<div>
     <div id="sidebar" :class="$mq">
+        <FilterTitle
+            v-bind:filter="filter"
+            v-on:updateFilter="filterMovies($event)"
+        />
         <Settings
             v-on:locationSubmit="requestMovieList($event)"
         />
@@ -20,18 +23,18 @@
     </div>
     <MovieListDesktop
         v-if="$mq === 'lg'"
+        v-bind:filter="filter"
         v-bind:movies="movies"
         v-bind:checkedTheatres="checkedTheatres"
         v-bind:removedMovies="removedMovies"
     />
     <MovieListMobile
         v-if="$mq === 'sm'"
+        v-bind:filter="filter"
         v-bind:movies="movies"
         v-bind:checkedTheatres="checkedTheatres"
         v-bind:removedMovies="removedMovies"
     />
-</div>
-
 </div>
 </template>
 
@@ -42,6 +45,7 @@ import MovieListMobile from './components/MovieListMobile.vue'
 import Settings from './components/Settings.vue'
 import TheatreList from './components/TheatreList.vue'
 import HiddenMovies from './components/HiddenMovies.vue'
+import FilterTitle from './components/FilterTitle.vue'
 
 export default {
   name: 'Showtimes',
@@ -52,6 +56,7 @@ export default {
     Settings,
     TheatreList,
     HiddenMovies,
+    FilterTitle,
   },
   data() {
       return {
@@ -59,6 +64,7 @@ export default {
           theatres: [],
           checkedTheatres: [],
           removedMovies: [],
+          filter: '',
 
           loading: false,
           loaded: false,
@@ -112,6 +118,9 @@ export default {
               ths.loaded = true;
           }
           xhr.send();
+      },
+      filterMovies: function(filter) {
+          this.filter = filter;
       },
   }
 }

@@ -71,7 +71,7 @@
 <script>
 export default {
   name: 'MovieListMobile',
-  props: ['movies', 'checkedTheatres', 'removedMovies'],
+  props: ['movies', 'checkedTheatres', 'removedMovies', 'filter'],
   methods: {
       formatRuntime: function(runtime) { // movie list
           var hr = parseInt(runtime.substr(2,2));
@@ -84,6 +84,9 @@ export default {
       },
       showMovie: function(movie) { // movie list
           if (findWithAttr(this.removedMovies, 'title', movie.title) != -1) return false;
+          if (filterMovie(movie.title, this.filter)) {
+              return false;
+          }
           var ct = this.checkedTheatres;
           var ret = false;
           movie.showtimes.forEach(function(showtime){
@@ -117,6 +120,17 @@ export default {
           }
       },
   }
+}
+
+var filterMovie = function(title, filter) {
+    var ret = false;
+    filter.split(' ').forEach(function(word) {
+        if (title.toLowerCase().indexOf(word.toLowerCase()) == -1) {
+            ret = true;
+            return;
+        }
+    })
+    return ret;
 }
 
 var findWithAttr = function(array, attr, value) {
