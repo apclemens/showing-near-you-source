@@ -8,7 +8,7 @@
 		</tr>
         </thead>
         <tbody>
-            <tr v-for="(data) in movies" :key="data.tmsId" v-bind:class="{visible: showMovie(data)}">
+            <tr v-for="(data) in movies" :key="data.tmsId" v-bind:class="{visible: showMovie(data), odd: data.row_index}">
 			<td>
                 <div class="remove-button" v-on:click="removedMovies.push(data)"></div>
                 <span class="tooltip">
@@ -72,6 +72,7 @@ export default {
           return a.toDateString() + ' ' + a.toLocaleTimeString();
       },
       showMovie: function(movie) { // movie list
+          movie.row_index = row_index%2;
           if (findWithAttr(this.removedMovies, 'title', movie.title) != -1) return false;
           if (filterMovie(movie.title, this.filter)) {
               return false;
@@ -86,6 +87,7 @@ export default {
                   return;
               }
           })
+          if (ret) row_index++;
           return ret;
       },
       formatShowtimes: function(showtimes) { // movie list
@@ -100,6 +102,8 @@ export default {
       },
   }
 }
+
+var row_index = 0;
 
 var filterMovie = function(title, filter) {
     var ret = false;
@@ -147,10 +151,10 @@ var findWithAttr = function(array, attr, value) {
 #movie-list tbody tr:not(.visible) {
     display: none;
 }
-#movie-list tbody .visible:nth-of-type(even) {
+#movie-list tbody .visible {
     background-color: #f2f2f2;
 }
-#movie-list tbody .visible:nth-of-type(odd) {
+#movie-list tbody .visible.odd {
     background-color: #ddd;
 }
 .visible:hover {
