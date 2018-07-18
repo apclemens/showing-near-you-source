@@ -1,10 +1,6 @@
 <template>
 <div>
     <div id="sidebar" :class="$mq">
-        <FilterTitle
-            v-bind:filter="filter"
-            v-on:updateFilter="filterMovies($event)"
-        />
         <Settings
             v-on:locationSubmit="requestMovieList($event)"
         />
@@ -21,6 +17,10 @@
             v-on:reAddMovie="removedMovies.splice($event, 1);"
         />
     </div>
+    <FilterTitle
+        v-bind:filter="filter"
+        v-on:updateFilter="filterMovies($event)"
+    />
     <MovieListDesktop
         v-if="$mq === 'lg'"
         v-bind:filter="filter"

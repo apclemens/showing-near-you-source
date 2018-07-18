@@ -24,17 +24,19 @@ export default {
 </script>
 
 <style scoped>
-#filter-wrapper.sm {
+#filter-wrapper {
     height: 52px;
+}
+#filter-wrapper.lg {
+    margin-left: 320px;
+    width: calc(100% - 320px);
 }
 #filter-wrapper input {
     width: calc(100% - 16px);
+    height:40px;
 }
 #filter-wrapper.sm input {
-    width: calc(100% - 12px);
-    height:40px;
+    width: calc(100% - 16px);
     margin-bottom: 6px;
-    position: fixed;
-    top: 0;
 }
 </style>
