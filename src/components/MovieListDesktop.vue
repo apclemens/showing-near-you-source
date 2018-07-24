@@ -60,7 +60,7 @@
 <script>
 export default {
   name: 'MovieList',
-  props: ['movies', 'checkedTheatres', 'removedMovies', 'filter'],
+  props: ['movies', 'uncheckedTheatres', 'removedMovies', 'filter'],
   methods: {
       formatRuntime: function(runtime) { // movie list
           var hr = parseInt(runtime.substr(2,2));
@@ -79,11 +79,11 @@ export default {
               return false;
           }
 
-          var ct = this.checkedTheatres;
+          var ut = this.uncheckedTheatres;
           var ret = false;
           movie.showtimes.forEach(function(showtime){
-              // if showtime.theatre.id in checkedTheatres, return true
-              if (ct.indexOf(showtime.theatre.id) >= 0) {
+              // if showtime.theatre.id in uncheckedTheatres, return true
+              if (ut.indexOf(showtime.theatre.id) == -1) {
                   ret = true;
                   return;
               }
@@ -96,9 +96,9 @@ export default {
       },
       formatShowtimes: function(showtimes) { // movie list
           var displayedShowtimes = {};
-          var ct = this.checkedTheatres
+          var ut = this.uncheckedTheatres
           showtimes.forEach(function(showtime){
-              if (ct.indexOf(showtime.theatre.id) == -1) return;
+              if (ut.indexOf(showtime.theatre.id) != -1) return;
               if (!displayedShowtimes.hasOwnProperty(showtime.theatre.name)) displayedShowtimes[showtime.theatre.name] = [];
               displayedShowtimes[showtime.theatre.name].push(showtime.dateTime);
           })

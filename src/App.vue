@@ -9,7 +9,7 @@
         <TheatreList
             v-bind:theatres="theatres"
             v-bind:loaded="loaded"
-            v-model="checkedTheatres"
+            v-model="uncheckedTheatres"
         />
         <HiddenMovies
             v-if="$mq === 'lg'"
@@ -25,14 +25,14 @@
         v-if="$mq === 'lg'"
         v-bind:filter="filter"
         v-bind:movies="movies"
-        v-bind:checkedTheatres="checkedTheatres"
+        v-bind:uncheckedTheatres="uncheckedTheatres"
         v-bind:removedMovies="removedMovies"
     />
     <MovieListMobile
         v-if="$mq === 'sm'"
         v-bind:filter="filter"
         v-bind:movies="movies"
-        v-bind:checkedTheatres="checkedTheatres"
+        v-bind:uncheckedTheatres="uncheckedTheatres"
         v-bind:removedMovies="removedMovies"
     />
 </div>
@@ -62,7 +62,7 @@ export default {
       return {
           movies: [],
           theatres: [],
-          checkedTheatres: [],
+          uncheckedTheatres: [],
           removedMovies: [],
           filter: '',
 

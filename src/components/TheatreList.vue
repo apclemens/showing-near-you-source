@@ -4,7 +4,7 @@
             <h2>Theatres</h2>
             <h4 v-show="theatres.length">Click to include/exclude</h4>
             <h4 v-show="!theatres.length && loaded">No theatres found</h4>
-            <div v-show="theatres.length" class="theatre-label" id="select-all-label" v-on:click="toggleAll">Select all</div>
+            <div v-show="theatres.length" class="theatre-label" id="select-all-label" v-on:click="toggleAll">Select none</div>
             <div id="actual-list">
             <div class="theatre" :class="$mq" v-for="(data, index) in theatres" :key="index">
                 <input
@@ -14,7 +14,7 @@
                     type="checkbox"
                     :key="data.id"
                     :value="data.id"
-                    v-model="checkedTheatres"
+                    v-model="uncheckedTheatres"
                     @change="updateValue"
                 >
                 <label class="theatre-label" :class="$mq" :for="data.id">{{data.name}}</label>
@@ -30,29 +30,29 @@ export default {
   name: 'TheatreList',
   data() {
       return {
-          checkedTheatres: [],
+          uncheckedTheatres: [],
       }
   },
   props: ['theatres', 'loaded', 'value'],
   methods: {
       toggleAll: function(evt) { // theatre list
           switch (evt.target.innerHTML) {
-              case 'Select all':
-                  this.checkedTheatres = [];
-                  for (var i=0; i<this.theatres.length; i++) {
-                      this.checkedTheatres.push(this.theatres[i].id);
-                  }
-                  evt.target.innerHTML = 'Select none';
-                  break;
               case 'Select none':
-                  this.checkedTheatres = [];
+                  this.uncheckedTheatres = [];
+                  for (var i=0; i<this.theatres.length; i++) {
+                      this.uncheckedTheatres.push(this.theatres[i].id);
+                  }
                   evt.target.innerHTML = 'Select all';
+                  break;
+              case 'Select all':
+                  this.uncheckedTheatres = [];
+                  evt.target.innerHTML = 'Select none';
                   break;
           }
           this.updateValue();
       },
       updateValue() {
-          this.$emit('input', this.checkedTheatres)
+          this.$emit('input', this.uncheckedTheatres)
       },
       collapse: function() {
           if (this.$mq !== 'sm') return;
@@ -93,7 +93,7 @@ export default {
 
 .theatre-label {
     cursor: pointer;
-    color: red;
+    color: green;
 }
 .theatre-label.sm {
     width: 100%;
@@ -101,10 +101,13 @@ export default {
     padding: 7px;
 }
 .theatre-checkbox:checked + label {
-    color: green;
+    color: red;
+}
+.theatre-checkbox.sm + label {
+    background-color: rgba(0,255,0,.5);
 }
 .theatre-checkbox.sm:checked + label {
-    background-color: rgba(0,255,0,.5);
+    background-color: transparent;
 }
 
 #select-all-label {
