@@ -41,11 +41,18 @@
                 </span>
             </td>
 			<td>
-                <div class="tooltip" v-for="(showtimes, theatre, index) in formatShowtimes(data.showtimes)" :key="index">
+                <div class="tooltip" v-for="(types, theatre, index) in formatShowtimes(data.customShowtimes)" :key="index">
                     {{theatre}}
                     <span class="tooltiptext">
                         <ul>
-                            <li v-for="(showtime, index) in showtimes" :key="index">{{formatShowtime(showtime)}}</li>
+                            <li v-for="(showtimes, type, index) in types" :key="index">
+                                {{type}}
+                                <ul>
+                                    <li v-for="(showtime, index) in showtimes" :key="index">
+                                        {{formatShowtime(showtime)}}
+                                    </li>
+                                </ul>
+                            </li>
                         </ul>
                     </span>
                 </div>
@@ -94,14 +101,18 @@ export default {
           }
           return ret;
       },
-      formatShowtimes: function(showtimes) { // movie list
+      formatShowtimes: function(customShowtimes) { // movie list
           var displayedShowtimes = {};
-          var ut = this.uncheckedTheatres
-          showtimes.forEach(function(showtime){
-              if (ut.indexOf(showtime.theatre.id) != -1) return;
-              if (!displayedShowtimes.hasOwnProperty(showtime.theatre.name)) displayedShowtimes[showtime.theatre.name] = [];
-              displayedShowtimes[showtime.theatre.name].push(showtime.dateTime);
-          })
+          var ut = this.uncheckedTheatres;
+          for (var type in customShowtimes) {
+              if (!customShowtimes.hasOwnProperty(type)) continue;
+              customShowtimes[type].forEach(function(showtime){
+                  if (ut.indexOf(showtime.theatre.id) != -1) return; // skip if this theatre is not selected
+                  if (!displayedShowtimes.hasOwnProperty(showtime.theatre.name)) displayedShowtimes[showtime.theatre.name] = {};
+                  if (!displayedShowtimes[showtime.theatre.name].hasOwnProperty(type)) displayedShowtimes[showtime.theatre.name][type] = [];
+                  displayedShowtimes[showtime.theatre.name][type].push(showtime.dateTime);
+              })
+          }
           return displayedShowtimes;
       },
   }

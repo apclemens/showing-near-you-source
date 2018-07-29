@@ -102,7 +102,21 @@ export default {
                   if (!xhr.responseText) {
                       ths.movies = [];
                   } else {
-                  ths.movies = JSON.parse(xhr.responseText);
+                  var moviesTmp = JSON.parse(xhr.responseText);
+                      console.log(moviesTmp);
+                      ths.movies = [];
+                      for (var i=0; i<moviesTmp.length; i++) {
+                          // if an element of ths.movies has a rootId equal to
+                          // moviesTmp[i].rootId
+                          var preexisting = ths.movies.find(function(element){return element.rootId == moviesTmp[i].rootId});
+                          if (preexisting) {
+                              preexisting.customShowtimes[moviesTmp[i].title] = moviesTmp[i].showtimes;
+                          } else {
+                              moviesTmp[i].customShowtimes = {};
+                              moviesTmp[i].customShowtimes[moviesTmp[i].title] = moviesTmp[i].showtimes;
+                              ths.movies[ths.movies.length] = moviesTmp[i];
+                          }
+                      }
                   ths.movies.sort(function(a, b){
                       return a.title > b.title ? 1 : a.title < b.title ? -1 : 0;
                   })
